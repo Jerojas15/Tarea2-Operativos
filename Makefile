@@ -11,3 +11,6 @@ run_default_pre-thread:
 
 run_default_pre-fork:
 	./$(EXE) -p 8888 -f 10	
+
+clear:
+	rm $(EXE)
