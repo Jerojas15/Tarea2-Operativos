@@ -123,11 +123,11 @@ int main(int argc, char *argv[]){
 		switch(option){
 			case 'p':
 				port = atoi(optarg);
-			case 't':
+			case 'f':
 				bindSocket(port);
 				createProcessPool(20);
 				return 0;
-			case 'f':
+			case 't':
 				bindSocket(port);
 				startThreads(20);
 				return 0;
