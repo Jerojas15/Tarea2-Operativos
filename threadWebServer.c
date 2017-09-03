@@ -1,46 +1,8 @@
-#include "ThreadWebServer.h"
+#include "threadWebServer.h"
+#include "socket.h"
 //http://www.binarytides.com/socket-programming-c-linux-tutorial/
 //http://www.thegeekstuff.com/2012/05/c-mutex-examples/?refcom
 //https://gist.github.com/alexklibisz/7cffdfe90c97986f8393
-
-int createSocket(){
-	//Create socket
-	int socketId = socket(AF_INET , SOCK_STREAM , 0);
-	if (socketId == -1){
-	    printf("Error al crear el socket");
-	}
-	printf("Socket creado con exito\n");
-	return socketId;
-}
-
-void bindSocket(int port){
-	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(port);     
-	//Bind
-	if( bind(prin_socket,(struct sockaddr *)&server , sizeof(server)) < 0)
-	{
-	    printf("error durante el bind");
-	}
-	printf("Escuchando el puerto %i\n",port);
-}
-
-
-void createProcessPool(int max){  //NO ESTA LISTO
-	pid_t pidFork = -1;
-	int processNumber = 0;
-	processPool = malloc(max*sizeof(int));
-	while(processNumber<max){
-		if(pidFork == 0){
-			break;
-		}else{
-			processPool[processNumber++] = pidFork;
-			waitpid(-1, NULL, WNOHANG);
-			printf("SI\n");	
-		}
-		 
-	}
-}
 
 void *threadHandler(){
 	int new_socket_aux;
@@ -114,25 +76,25 @@ void startThreads(int max){
 
 
 int main(int argc, char *argv[]){
-	int option, read_size;
+	int option, read_size, threads;
 	int new_socket, c, port = 8888;
-	char *message, client_message[2000], *answer;
-	prin_socket = createSocket();
-	printf("Server iniciado con exito\n");
-	while((option = getopt(argc,argv,"p:tf")) != -1){
+	while((option = getopt(argc,argv,"n:wp:")) != -1){
 		switch(option){
 			case 'p':
 				port = atoi(optarg);
-			case 'f':
-				bindSocket(port);
-				createProcessPool(20);
-				return 0;
-			case 't':
-				bindSocket(port);
-				startThreads(20);
-				return 0;
+				break;
+			case 'n':
+				threads = atoi(optarg);
+				break;
+			case 'w':
+				printf("path\n");
+				break;
 		}
 	}
+	prin_socket = createSocket();
+	printf("Server iniciado con exito\n");
+	bindSocket(prin_socket, port);
+	startThreads(threads);
 	/*
 	listen(socket, 3);
      

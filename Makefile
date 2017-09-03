@@ -1,5 +1,5 @@
-HEADERS = webServer.h
-FILES = webServer.c
+HEADERS = threadWebServer.h socket.h
+FILES = threadWebServer.c socket.c
 LIBRARYS = -pthread
 EXE = eje
 
