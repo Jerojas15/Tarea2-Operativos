@@ -14,25 +14,9 @@
 */
 char *request(char *requestMsg);
 
-/*
- * Funcion: methodHandler
- * ----------------------
- * Procedimiento el cual se encarga de manejar las consultas, si existe una consulta
- * en especificada con un procedimiento, llamara ese procedimiento; por lo contrario
- * se llamara el procediemiento por defecto
- *
- * method:  GET, POST
- * path: 	Direccion al recurso
- * argc: 	Numero de parametros [puede ser 0]
- * argv: 	Arreglo con los parametros [puede ser nulo]
- *
- * Retorno:
- * 			Mensaje siguiendo el formato HTTP
- */
-char *methodHandler(char *method, char *path, int argc, char *argv[]);
 
 /*
- * Funcion: defaultGetMethod
+ * Funcion: GetMethod
  * -------------------------
  * Procedimiento por defecto para las consultas bajo el metodo GET,
  * bucara el archivo asociado en la ultima direccion del path y lo
@@ -42,10 +26,10 @@ char *methodHandler(char *method, char *path, int argc, char *argv[]);
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
  */
-char *defaultGetMethod();
+char *getMethod(char *method, char *path, int paramCount, char *parameters[], char *body);
 
 /*
- * Funcion: defaultPostMethod
+ * Funcion: PostMethod
  * -------------------------
  * Procedimiento por defecto para las consultas bajo el metodo POST,
  * crea un archivo html cuyo cuerpo sera los datos enviados 
@@ -54,6 +38,6 @@ char *defaultGetMethod();
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
  */
-char *defaultPostMethod();
+char *postMethod(char *method, char *path, int paramCount, char *parameters[], char *body);
 
 #endif
