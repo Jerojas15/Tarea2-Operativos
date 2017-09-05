@@ -11,10 +11,10 @@ all:
 	gcc $(FORKHEADERS) $(FORKFILES) -o $(EXE2)
 
 run_default_pre-thread:
-	./$(EXE) -p 8888 -t 10
+	./$(EXE) -p 8888 -n 10
 
 run_default_pre-fork:
-	./$(EXE) -p 8888 -f 10	
+	./$(EXE2) -p 8888 -n 10	
 
 clean:
 	rm $(EXE)
