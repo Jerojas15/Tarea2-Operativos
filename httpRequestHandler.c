@@ -3,21 +3,24 @@
 #include <string.h>
 #include "httpRequestHandler.h"
 
+char NOT_IMPLEMENTED[] = "HTTP/1.1 501 Not Implemented";
+
 
 int headerCount(char *requestMsg){
 
-	char c;
+	char c1, c2;
 	int count, ith;
 	
-	c = 1;
+	c1 = 1;
+	c2 = 1;
 	count = 0;
 	ith = 0;
-	while(c){
-		c = requestMsg[ith]; 
-		
-		if(c == '\n'){
+	while(c1){
+		c1 = requestMsg[ith];
+		c2 = requestMsg[ith+1];
+		if(c1 == '\n'){
 			
-			if(c == requestMsg[ith+1])
+			if(c1 == c2 || !c2)
 				break;
 
 			count++;
@@ -76,21 +79,19 @@ char *request(char *requestMsg){
 
 	headers = (char**)malloc(headersCount * sizeof(char*));
 
-	count = headersCount;
 	for(int i = 0; i < headersCount; i++){
 
 		headers[i] = strtok(NULL, "\n");
 	}
 
-	body = strtok(NULL, "\0");
-	body += 1;							//Ignorar el segundo \n despues de los headers
-	
+	body = strtok(NULL, "\n\0");
+	if(body)
+		body += 1;						//Ignorar el segundo \n despues de los headers si existe
 	
 	paramsCount = paramCount(path); 	//Si el path presenta parametros, aqui se parsean
 	if(paramsCount > 0){
 
 		path = strtok(path, "?");
-		s = strtok(NULL, "\0");
 		parameters = (char**)malloc(paramsCount * sizeof(char*));
 
 		count = paramsCount;
@@ -98,7 +99,7 @@ char *request(char *requestMsg){
 		ith = 0;
 		while(count--){
 
-			parameters[ith] = strtok(s, "&");
+			parameters[ith] = strtok(NULL, "&");
 			ith++;
 		}
 		parameters[ith] = strtok(NULL, "\0");
@@ -106,11 +107,18 @@ char *request(char *requestMsg){
 
 
 	if(!strcmp(method, "GET")){
+		
 		getMethod(method, path, paramsCount, parameters, body);
+
 	}else if(!strcmp(method, "POST")){
+		
 		postMethod(method, path, paramsCount, parameters, body);
+
 	}else {
+		
 		printf("Metodo <%s> no soportado\n", method);
+		
+		return NOT_IMPLEMENTED;
 	}
 
 	printf("\n");
@@ -118,10 +126,10 @@ char *request(char *requestMsg){
 	for(int i = 0; i < paramsCount; i++) printf("%s\n", parameters[i]);
 	printf("%s\n", httpVersion);
 	for(int i = 0; i < headersCount; i++)  printf("%s\n", headers[i]);
-	printf("%s\n", body);
+	if(body)
+		printf("%s\n", body);
 
-
-	return 0;
+	return NULL;
 }
 
 /*

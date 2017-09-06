@@ -17,9 +17,9 @@ void *threadHandler(){
 		new_socket = -1;
 		pthread_mutex_unlock(&mutex);
 		if ( new_socket_aux > 0){
-			printf("\n\nAQUI SE PROCESA EL MENSAJE\n\n");
+			//printf("\n\nAQUI SE PROCESA EL MENSAJE\n\n");
 			recv(new_socket_aux , requestMsg, 2000 , 0);
-			printf("%s\n", requestMsg);
+			printf("---------------------------------\n%s---------------------------------\n", requestMsg);
 			char *response = request(requestMsg);
 			
 
