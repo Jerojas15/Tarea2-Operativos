@@ -16,7 +16,7 @@ void bindSocket(int socket, int port){
 	//Bind
 	if( bind(socket,(struct sockaddr *)&server , sizeof(server)) < 0)
 	{
-	    printf("error durante el bind");
+	    printf("Error durante el bind\n");
 	}else{
 		printf("Escuchando el puerto %i\n",port);	
 	}

@@ -1,13 +1,12 @@
 #include "threadWebServer.h"
 #include "socket.h"
-#include "httpRequestHandler.h"
+#include "requestHandler.h"
 //http://www.binarytides.com/socket-programming-c-linux-tutorial/
 //http://www.thegeekstuff.com/2012/05/c-mutex-examples/?refcom
 //https://gist.github.com/alexklibisz/7cffdfe90c97986f8393
 
 void *threadHandler(){
 	int new_socket_aux;
-	char requestMsg[5000];
 	while(true){
 		pthread_mutex_lock(&mutex);
 		while (new_socket == -1){
@@ -18,9 +17,8 @@ void *threadHandler(){
 		pthread_mutex_unlock(&mutex);
 		if ( new_socket_aux > 0){
 			//printf("\n\nAQUI SE PROCESA EL MENSAJE\n\n");
-			recv(new_socket_aux , requestMsg, 2000 , 0);
-			printf("---------------------------------\n%s---------------------------------\n", requestMsg);
-			char *response = request(requestMsg);
+			char * response = accept_request(new_socket_aux, port);
+			write(new_socket_aux,response,strlen(response));
 			
 
 
@@ -84,7 +82,7 @@ void startThreads(int max){
 
 int main(int argc, char *argv[]){
 	int option, read_size, threads;
-	int new_socket, c, port = 8888;
+	int new_socket, c;
 	while((option = getopt(argc,argv,"n:wp:")) != -1){
 		switch(option){
 			case 'p':

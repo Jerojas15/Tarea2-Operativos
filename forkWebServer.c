@@ -1,5 +1,6 @@
 #include "forkWebServer.h"
 #include "socket.h"
+#include "requestHandler.h"
 
 void startForkServer(int max){
 	int new_conn, current_clients = 0;
@@ -20,9 +21,8 @@ void startForkServer(int max){
 	    if (new_conn < 0) { 
 	    	printf("Error recibiendo una solicitud\n"); 
 		}else {
-	    	message = "Hola, soy el proceso host\n";
-	        write(new_conn , message , strlen(message));
-	        sleep(10);
+			char * response = accept_request(new_conn, port);
+			write(new_conn,response,strlen(response));
 	        close(new_conn);
 	        current_clients--;
 	    }
@@ -31,7 +31,7 @@ void startForkServer(int max){
 
 int main(int argc, char *argv[]){
 	int option, forks;
-	int port = 8888;
+	port = 0;
 	while((option = getopt(argc,argv,"n:wp:")) != -1){
 		switch(option){
 			case 'p':

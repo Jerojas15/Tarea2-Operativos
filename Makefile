@@ -1,7 +1,7 @@
 THREADHEADERS = threadWebServer.h socket.h
 THREADFILES = threadWebServer.c socket.c
-GLOBALHEADERS = httpRequestHandler.h 
-GLOBARLFILES = httpRequestHandler.c
+GLOBALHEADERS = httpRequestHandler.h requestHandler.h
+GLOBARLFILES = httpRequestHandler.c requestHandler.c
 FORKHEADERS = forkWebServer.c socket.c
 FORKFILES = forkWebServer.h socket.h
 LIBRARYS = -pthread
@@ -13,10 +13,10 @@ all:
 	gcc $(FORKHEADERS) $(GLOBALHEADERS) $(GLOBARLFILES) $(FORKFILES) -o $(EXE2)
 
 run_default_pre-thread:
-	./$(EXE) -p 8888 -n 10
+	./$(EXE) -p 2022 -n 10
 
 run_default_pre-fork:
-	./$(EXE2) -p 8888 -n 10	
+	./$(EXE2) -p 2022 -n 10	
 
 clean:
 	rm $(EXE)

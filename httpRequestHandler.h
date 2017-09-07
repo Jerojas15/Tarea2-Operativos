@@ -1,6 +1,10 @@
 #ifndef _HTTPREQUESTHANDLER_H
 #define _HTTPREQUESTHANDLER_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 /*
  * Funcion: request
  * -----------------
