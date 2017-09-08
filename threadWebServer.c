@@ -8,6 +8,7 @@
 void *threadHandler(){
 	int new_socket_aux;
 	char requestMsg[5000];
+	char *response;
 	while(true){
 		pthread_mutex_lock(&mutex);
 		while (new_socket == -1){
@@ -20,8 +21,9 @@ void *threadHandler(){
 			//printf("\n\nAQUI SE PROCESA EL MENSAJE\n\n");
 			recv(new_socket_aux , requestMsg, 2000 , 0);
 			printf("---------------------------------\n%s---------------------------------\n", requestMsg);
-			char *response = request(requestMsg);
 			
+			response = request(requestMsg);
+			write(new_socket_aux, response, strlen(response));
 
 
 			close(new_socket_aux);

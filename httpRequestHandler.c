@@ -3,8 +3,9 @@
 #include <string.h>
 #include "httpRequestHandler.h"
 
-char NOT_IMPLEMENTED[] = "HTTP/1.1 501 Not Implemented";
-
+char *NOT_IMPLEMENTED 	= "HTTP/1.1 501 Not Implemented\n";
+char *OK 				= "HTTP/1.1 200 OK\n";
+char *NOT_FOUND 		= "HTTP/1.1 404 Not Found\n";
 
 int headerCount(char *requestMsg){
 
@@ -108,7 +109,7 @@ char *request(char *requestMsg){
 
 	if(!strcmp(method, "GET")){
 		
-		getMethod(method, path, paramsCount, parameters, body);
+		return getMethod(method, path, paramsCount, parameters, body);
 
 	}else if(!strcmp(method, "POST")){
 		
@@ -144,7 +145,22 @@ char *request(char *requestMsg){
  * 			Mensaje siguiendo el formato HTTP
  */
 char *getMethod(char *method, char *path, int paramCount, char *parameters[], char *body){
+	char *response;
+	int responseLen;
+
+	responseLen = strlen(OK);
+	response += strlen("<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a Heading</h1><p>This is a paragraph.</p></body></html>");
+	responseLen += 1;
+
+	response = malloc(responseLen * sizeof(char));
+	strcpy(response, OK);
+	strcat(response, "\n");
+	strcat(response, "<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a Heading</h1><p>This is a paragraph.</p></body></html>");
+
 	printf("Metodo GET\n");
+
+
+	return response;
 }
 
 /*
