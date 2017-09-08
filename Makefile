@@ -16,7 +16,7 @@ run_default_pre-thread:
 	./$(EXE) -p 2022 -n 10
 
 run_default_pre-fork:
-	./$(EXE2) -p 2022 -n 10	
+	./$(EXE2) -p 2022 -n 2	
 
 clean:
 	rm $(EXE)

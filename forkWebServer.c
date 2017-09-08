@@ -3,26 +3,36 @@
 #include "requestHandler.h"
 
 void startForkServer(int max){
-	int new_conn, current_clients = 0;
+	int new_conn;
 	char *message;
 	int p;
+	int shmid;
+   	int *shm;
+   	int current_clients = 0;
+	//shmid = shmget(2009, 30, 0666 | IPC_CREAT);
+  	//shm = shmat(shmid, 0, 0);
+  	//current_clients = shm;
+
 	for (int i = 0; i < max; ++i) {
 	    p = fork();
 	    if (p == 0) break;
 	    if (p < 0) { printf("Error creando los procesos\n"); }
 	}
 	while (true) {
-		if(current_clients==max){
+
+	    new_conn = accept(prin_socket,NULL,NULL);
+
+	    current_clients++;
+		if(current_clients>=max){
 			printf("Todos los procesos ocupados\n");
 		}
-	    new_conn = accept(prin_socket,NULL,NULL);
-	    current_clients++;
 	    printf("Se ha conectado un nuevo cliente\n");
 	    if (new_conn < 0) { 
 	    	printf("Error recibiendo una solicitud\n"); 
 		}else {
 			char * response = accept_request(new_conn, port);
 			write(new_conn,response,strlen(response));
+			sleep(10);
 	        close(new_conn);
 	        current_clients--;
 	    }

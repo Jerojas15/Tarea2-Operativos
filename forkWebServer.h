@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
 
 #define MAX_CONNECTIONS 100
 #define true 1
