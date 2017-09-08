@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 
 struct sockaddr_in server, client;
-
+int port;
 //----- FUNCIONES DEL SERVER -----//
 int createSocket();
 void bindSocket(int socket, int port);

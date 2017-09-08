@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "httpRequestHandler.h"
 
 char *NOT_IMPLEMENTED 	= "HTTP/1.1 501 Not Implemented\n";
@@ -68,7 +65,6 @@ int paramCount(char *path){
  * 			Mensaje siguiendo el formato HTTP
 */
 char *request(char *requestMsg){
-
 	int paramsCount, headersCount, count, ith;
 	char *method, *path, **parameters, *httpVersion, **headers, *body, *s;
 
