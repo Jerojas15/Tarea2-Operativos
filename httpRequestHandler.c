@@ -4,6 +4,7 @@ char *NOT_IMPLEMENTED 	= "HTTP/1.1 501 Not Implemented\n";
 char *OK 				= "HTTP/1.1 200 OK\n";
 char *NOT_FOUND 		= "HTTP/1.1 404 Not Found\n";
 
+
 int headerCount(char *requestMsg){
 
 	char c1, c2;

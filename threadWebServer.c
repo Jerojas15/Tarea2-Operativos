@@ -1,6 +1,7 @@
 #include "threadWebServer.h"
 #include "socket.h"
 #include "requestHandler.h"
+#include "httpRequestHandler.h"
 //http://www.binarytides.com/socket-programming-c-linux-tutorial/
 //http://www.thegeekstuff.com/2012/05/c-mutex-examples/?refcom
 //https://gist.github.com/alexklibisz/7cffdfe90c97986f8393
