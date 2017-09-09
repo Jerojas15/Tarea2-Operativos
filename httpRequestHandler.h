@@ -30,7 +30,7 @@ char *request(char *requestMsg);
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
  */
-char *getMethod(char *method, char *path, int paramCount, char *parameters[], char *body);
+char *getMethod(char *path, int paramCount, char *parameters[], char *body);
 
 /*
  * Funcion: PostMethod
@@ -42,6 +42,6 @@ char *getMethod(char *method, char *path, int paramCount, char *parameters[], ch
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
  */
-char *postMethod(char *method, char *path, int paramCount, char *parameters[], char *body);
+char *postMethod(char *path, int paramCount, char *parameters[], char *body);
 
 #endif

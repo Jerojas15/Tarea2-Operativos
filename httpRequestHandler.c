@@ -4,7 +4,6 @@ char *NOT_IMPLEMENTED 	= "HTTP/1.1 501 Not Implemented\n";
 char *OK 				= "HTTP/1.1 200 OK\n";
 char *NOT_FOUND 		= "HTTP/1.1 404 Not Found\n";
 
-
 int headerCount(char *requestMsg){
 
 	char c1, c2;
@@ -66,14 +65,20 @@ int paramCount(char *path){
  * 			Mensaje siguiendo el formato HTTP
 */
 char *request(char *requestMsg){
-	int paramsCount, headersCount, count, ith;
-	char *method, *path, **parameters, *httpVersion, **headers, *body, *s;
+	char *currentPath = "/home/yock/Desktop/prueba/";
+	int pathLen, currentPathLen, paramsCount, headersCount, count, ith;
+	char *method, *path, *realPath, **parameters, *httpVersion, **headers, *body, *s;
 
 	headersCount = headerCount(requestMsg);
 
 	method = strtok(requestMsg, " ");
 	path = strtok(NULL, " ");
 	httpVersion = strtok(NULL, "\n");
+
+
+	//printf("1%s\n", method);
+	//printf("2%s\n", path);
+	//printf("3%s\n", httpVersion);
 
 	headers = (char**)malloc(headersCount * sizeof(char*));
 
@@ -103,31 +108,34 @@ char *request(char *requestMsg){
 		parameters[ith] = strtok(NULL, "\0");
 	}
 
+	currentPathLen = strlen(currentPath);
+	pathLen = strlen(path);
+	realPath = malloc((currentPathLen + pathLen) * sizeof(char));
+	strcpy(realPath, currentPath);
+	strcat(realPath, path+1);
 
-	if(!strcmp(method, "GET")){
-		
-		return getMethod(method, path, paramsCount, parameters, body);
-
-	}else if(!strcmp(method, "POST")){
-		
-		postMethod(method, path, paramsCount, parameters, body);
-
-	}else {
-		
-		printf("Metodo <%s> no soportado\n", method);
-		
-		return NOT_IMPLEMENTED;
-	}
-
+	/*
 	printf("\n");
-	printf("%s\n", method); printf("%s\n", path);
+	printf("%s\n", method); printf("%s\n", realPath);
 	for(int i = 0; i < paramsCount; i++) printf("%s\n", parameters[i]);
 	printf("%s\n", httpVersion);
 	for(int i = 0; i < headersCount; i++)  printf("%s\n", headers[i]);
+	*/
 	if(body)
 		printf("%s\n", body);
 
-	return NULL;
+	if(!strcmp(method, "GET")){
+		
+		return getMethod(realPath, paramsCount, parameters, body);
+
+	}else if(!strcmp(method, "POST")){
+		
+		return postMethod(realPath, paramsCount, parameters, body);
+
+	}
+		
+	printf("Metodo <%s> no soportado\n", method);
+	return NOT_IMPLEMENTED;
 }
 
 /*
@@ -141,23 +149,36 @@ char *request(char *requestMsg){
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
  */
-char *getMethod(char *method, char *path, int paramCount, char *parameters[], char *body){
+char *getMethod(char *path, int paramCount, char *parameters[], char *body){
+	
 	char *response;
-	int responseLen;
-
-	responseLen = strlen(OK);
-	response += strlen("<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a Heading</h1><p>This is a paragraph.</p></body></html>");
-	responseLen += 1;
-
-	response = malloc(responseLen * sizeof(char));
-	strcpy(response, OK);
-	strcat(response, "\n");
-	strcat(response, "<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a Heading</h1><p>This is a paragraph.</p></body></html>");
+	int messageLen;
+	long responseLen, fileLen;
+	FILE *fp;
 
 	printf("Metodo GET\n");
 
+	fp = fopen(path, "r");
 
-	return response;
+	if(fp){
+		
+		messageLen = strlen(OK);
+
+		fseek(fp, 0 , SEEK_END);
+		fileLen = ftell(fp);
+		rewind(fp);
+
+		responseLen = messageLen + fileLen + 1;
+
+		response = calloc(responseLen, sizeof(char));
+		strcpy(response, OK);
+		fread(response + messageLen, fileLen, 1, fp);
+
+		fclose(fp);
+		//printf("xxxxxx\n%s\nxxxxxx\n", response);
+		return response;
+	}
+	return NOT_FOUND;
 }
 
 /*
@@ -170,8 +191,49 @@ char *getMethod(char *method, char *path, int paramCount, char *parameters[], ch
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
  */
-char *postMethod(char *method, char *path, int paramCount, char *parameters[], char *body){
-	printf("Metodo POST\n");
+char *postMethod(char *path, int paramCount, char *parameters[], char *body){
+	
+	char *call_1 = "cd ";
+	char *call_2 = ";./";
+	char *call_3 = " > .temp";
+	char *program, *systemCall;
+	int result, pathLen, systemCallLen;
+
+	pathLen = strlen(path);
+
+	program = NULL;
+	for(int i = pathLen-1; i > 0; i--){
+		if(*(path+i) == '/'){
+			program = path+i;
+			break;
+		}
+	}
+	if(program)
+		*program = 0;
+	program += 1;
+	if(program){
+
+		printf("%s %s\n", path, program);
+
+		systemCallLen = strlen(call_1);
+		systemCallLen += strlen(call_2);
+		systemCallLen += strlen(call_3);
+		systemCallLen += strlen(path);
+		systemCallLen += strlen(program);
+		systemCallLen++;
+
+		systemCall = calloc(systemCallLen, sizeof(char));
+
+		strcpy(systemCall, call_1);
+		strcat(systemCall, path);
+		strcat(systemCall, call_2);
+		strcat(systemCall, program);
+		strcat(systemCall, call_3);
+
+		result = system(systemCall);
+		printf("%d\n", result);
+	}
+	return NOT_FOUND;
 }
 /*
 int main(int argc, char *argv[]){
