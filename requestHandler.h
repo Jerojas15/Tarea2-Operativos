@@ -3,7 +3,7 @@
 
 
 
-char *accept_request(int socket, int port);
+char *accept_request(int socket, int port, char *currentPath);
 
 
 

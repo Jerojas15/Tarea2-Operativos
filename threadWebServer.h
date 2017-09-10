@@ -15,6 +15,7 @@ int *processPool;
 int prin_socket;
 int current_threads;
 int new_socket;
+char *current_path;
 
 pthread_cond_t condition;
 pthread_cond_t accept_condition;

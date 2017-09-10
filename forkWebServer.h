@@ -14,5 +14,7 @@
 #define false 0
 
 int prin_socket;
+char *current_path;
+void startForkServer(int max);
 
 #endif

@@ -13,10 +13,10 @@ all:
 	gcc $(FORKHEADERS) $(GLOBALHEADERS) $(GLOBARLFILES) $(FORKFILES) -o $(EXE2)
 
 run_default_pre-thread:
-	./$(EXE) -p 2022 -n 10
+	./$(EXE) -p 2022 -n 10 -w /home/julio/
 
 run_default_pre-fork:
-	./$(EXE2) -p 2022 -n 2	
+	./$(EXE2) -p 2022 -n 2 -w /home/julio/
 
 clean:
 	rm $(EXE)

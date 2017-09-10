@@ -21,13 +21,8 @@ void *threadHandler(){
 		new_socket = -1;
 		pthread_mutex_unlock(&mutex);
 		if ( new_socket_aux > 0){
-			//printf("\n\nAQUI SE PROCESA EL MENSAJE\n\n");
-			recv(new_socket_aux , requestMsg, 2000 , 0);
-			printf("---------------------------------\n%s---------------------------------\n", requestMsg);
-			
-			char *currentPath = "/home/yock/Desktop/prueba/";
 
-			response = request(requestMsg, currentPath);
+			response = accept_request(new_socket_aux, port, current_path);
 			write(new_socket_aux, response, strlen(response));
 
 
@@ -92,7 +87,8 @@ void startThreads(int max){
 int main(int argc, char *argv[]){
 	int option, read_size, threads;
 	int new_socket, c;
-	while((option = getopt(argc,argv,"n:wp:")) != -1){
+	current_path = (char*)calloc(5000,sizeof(char));
+	while((option = getopt(argc,argv,"n:w:p:")) != -1){
 		switch(option){
 			case 'p':
 				port = atoi(optarg);
@@ -101,7 +97,7 @@ int main(int argc, char *argv[]){
 				threads = atoi(optarg);
 				break;
 			case 'w':
-				printf("path\n");
+				strcpy(current_path, optarg);
 				break;
 		}
 	}
@@ -109,33 +105,5 @@ int main(int argc, char *argv[]){
 	printf("Server iniciado con exito\n");
 	bindSocket(prin_socket, port);
 	startThreads(threads);
-	/*
-	listen(socket, 3);
-     
-    //Accept and incoming connection
-    puts("Esperando conexiones...");
-    c = sizeof(struct sockaddr_in);
-	while( (new_socket = accept(socket, (struct sockaddr *)&client, (socklen_t*)&c)) ){
-        puts("Conexion aceptada");
-         
-        //Reply to the client
-        message = "Hola!\n";
-        answer = "OK\n";
-        write(new_socket , message , strlen(message));//responde al cliente
-         
-        while( (read_size = recv(new_socket , client_message , 2000 , 0)) > 0 )
-    	{
-        	//Send the message back to client
-        	write(new_socket , answer , strlen(answer));
-        	bzero(client_message, read_size);
-    	}
-    }
-     
-    if (new_socket<0)
-    {
-        perror("fallo al conectar");
-        return 1;
-    }
-    //close(socket);*/
 	return 0;
 }

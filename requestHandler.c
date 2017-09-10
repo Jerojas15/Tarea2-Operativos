@@ -32,13 +32,11 @@ char *ssh_protocol(){
 	return response;
 }
 
-char *http_protocol(int socket){
+char *http_protocol(int socket, char *currentPath){
 	char *response;
 	char requestMsg[5000];
 	recv(socket , requestMsg, 5000 , 0);
 	printf("---------------------------------\n%s---------------------------------\n", requestMsg);
-
-	char *currentPath = "/home/yock/Desktop/prueba/";	
 	response = request(requestMsg, currentPath);
 	return response;
 }
@@ -51,7 +49,7 @@ char *snmp_protocol(){
 }
 
 
-char *accept_request(int socket, int port){
+char *accept_request(int socket, int port, char *currentPath){
 	char * response;
 	switch(port){
 		case 20:
@@ -71,7 +69,7 @@ char *accept_request(int socket, int port){
 			response = ssh_protocol();
 			break;
 		case 8080:
-			response = http_protocol(socket);
+			response = http_protocol(socket, currentPath);
 			break;
 		case 161:
 			response = snmp_protocol();
