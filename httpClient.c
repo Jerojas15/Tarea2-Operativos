@@ -33,6 +33,11 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 	char * message = (char *)calloc(5000, sizeof(char)); ////AQUI VA EL REQUEST
+
+	//el mensaje debe ser "GET resource HTTP/1.1\n"
+	strcpy(message, "GET ");
+	strcat(message, resource); // el recurso debe iniciar con '/'
+	strcat(message, " HTTP/1.1\n");
 	if(port == 8080){
 		send(sock,message,strlen(message),0);
 	}
