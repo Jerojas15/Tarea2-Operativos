@@ -21,10 +21,10 @@ void *threadHandler(){
 		new_socket = -1;
 		pthread_mutex_unlock(&mutex);
 		if ( new_socket_aux > 0){
-
+			char requestMsg[5000];
+			recv(new_socket_aux , requestMsg, 5000 , 0);
 			response = accept_request(new_socket_aux, port, current_path);
 			write(new_socket_aux, response, strlen(response));
-
 
 			close(new_socket_aux);
 			printf("Conexion finalizada correctamente.\n");
