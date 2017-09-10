@@ -12,20 +12,25 @@
  * utilizando el protocolo HTTP
  *
  * requestMsg: Mensaje siguiendo el formato HTTP para la consulta
+ * currentPath: Direccion donde se decea iniciar el servidor web
  *
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
 */
-char *request(char *requestMsg);
+char *request(char *requestMsg, char *currentPath);
 
 
 /*
- * Funcion: GetMethod
+ * Funcion: getMethod
  * -------------------------
  * Procedimiento por defecto para las consultas bajo el metodo GET,
- * bucara el archivo asociado en la ultima direccion del path y lo
- * lo tratara como si fuera 'html'; en caso de que el path sea un directorio
- * y no un archivo, se buscara un archivo con el mismo nombre
+ * bucara el archivo asociado a la direccion del path, retornando 
+ * su contenido en texto plano
+ *
+ * path: Direccion donde se encuentra el recurso 
+ * paramCount: Numero de parametros
+ * parameters: Parametros
+ * body: mensaje asociado al request
  * 
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
@@ -33,11 +38,15 @@ char *request(char *requestMsg);
 char *getMethod(char *path, int paramCount, char *parameters[], char *body);
 
 /*
- * Funcion: PostMethod
+ * Funcion: postMethod
  * -------------------------
- * Procedimiento por defecto para las consultas bajo el metodo POST,
- * crea un archivo html cuyo cuerpo sera los datos enviados 
- * [no se que podria hacer esto]
+ * Procedimiento el cual se encarga de ejecutar codigo en el servidor,
+ * pasando como parametro lo que se encuentre en el body
+ *
+ * path: Direccion donde se encuentra el recurso 
+ * paramCount: Numero de parametros
+ * parameters: Parametros
+ * body: mensaje asociado al request
  * 
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP

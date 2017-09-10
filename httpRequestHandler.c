@@ -3,7 +3,19 @@
 char *NOT_IMPLEMENTED 	= "HTTP/1.1 501 Not Implemented\n";
 char *OK 				= "HTTP/1.1 200 OK\n";
 char *NOT_FOUND 		= "HTTP/1.1 404 Not Found\n";
+char *INTERNAL_ERROR 	= "HTTP/1.1 500 Internal Server Error\n";
 
+/*
+ * Funcion: headerCount
+ * -------------------
+ * Procedimiento el cual cuenta la cantidad de "header lines"
+ * mediante un calculo utilizando '\n'
+ *
+ * requestMsg: Mensaje de entrada utilizando el formato HTTP
+ *
+ * Retorno:
+ * 			Numero de headers
+ */
 int headerCount(char *requestMsg){
 
 	char c1, c2;
@@ -28,7 +40,18 @@ int headerCount(char *requestMsg){
 	return count;
 }
 
-
+/*
+ * Funcion: paramCount
+ * -------------------
+ * Procedimiento el cual calcula la cantidad de parametros ingresados en el path
+ * mediante la cuenta de los caracteres '&' si se presenta el caracter '?' en el
+ * path
+ *
+ * path: Direccion del recurso sin haber sido parseada
+ *
+ * Retorno:
+ * 			Numero de parametros
+ */
 int paramCount(char *path){
 
 	char c, *s;
@@ -60,12 +83,13 @@ int paramCount(char *path){
  * utilizando el protocolo HTTP
  *
  * requestMsg: Mensaje siguiendo el formato HTTP para la consulta
+ * currentPath: Direccion donde se decea iniciar el servidor web
  *
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
 */
-char *request(char *requestMsg){
-	char *currentPath = "/home/yock/Desktop/prueba/";
+char *request(char *requestMsg, char *currentPath){
+
 	int pathLen, currentPathLen, paramsCount, headersCount, count, ith;
 	char *method, *path, *realPath, **parameters, *httpVersion, **headers, *body, *s;
 
@@ -74,11 +98,6 @@ char *request(char *requestMsg){
 	method = strtok(requestMsg, " ");
 	path = strtok(NULL, " ");
 	httpVersion = strtok(NULL, "\n");
-
-
-	//printf("1%s\n", method);
-	//printf("2%s\n", path);
-	//printf("3%s\n", httpVersion);
 
 	headers = (char**)malloc(headersCount * sizeof(char*));
 
@@ -114,16 +133,6 @@ char *request(char *requestMsg){
 	strcpy(realPath, currentPath);
 	strcat(realPath, path+1);
 
-	/*
-	printf("\n");
-	printf("%s\n", method); printf("%s\n", realPath);
-	for(int i = 0; i < paramsCount; i++) printf("%s\n", parameters[i]);
-	printf("%s\n", httpVersion);
-	for(int i = 0; i < headersCount; i++)  printf("%s\n", headers[i]);
-	*/
-	if(body)
-		printf("%s\n", body);
-
 	if(!strcmp(method, "GET")){
 		
 		return getMethod(realPath, paramsCount, parameters, body);
@@ -142,9 +151,13 @@ char *request(char *requestMsg){
  * Funcion: getMethod
  * -------------------------
  * Procedimiento por defecto para las consultas bajo el metodo GET,
- * bucara el archivo asociado en la ultima direccion del path y lo
- * lo tratara como si fuera 'html'; en caso de que el path sea un directorio
- * y no un archivo, se buscara un archivo con el mismo nombre
+ * bucara el archivo asociado a la direccion del path, retornando 
+ * su contenido en texto plano
+ *
+ * path: Direccion donde se encuentra el recurso 
+ * paramCount: Numero de parametros
+ * parameters: Parametros
+ * body: mensaje asociado al request
  * 
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
@@ -155,8 +168,6 @@ char *getMethod(char *path, int paramCount, char *parameters[], char *body){
 	int messageLen;
 	long responseLen, fileLen;
 	FILE *fp;
-
-	printf("Metodo GET\n");
 
 	fp = fopen(path, "r");
 
@@ -175,7 +186,6 @@ char *getMethod(char *path, int paramCount, char *parameters[], char *body){
 		fread(response + messageLen, fileLen, 1, fp);
 
 		fclose(fp);
-		//printf("xxxxxx\n%s\nxxxxxx\n", response);
 		return response;
 	}
 	return NOT_FOUND;
@@ -184,9 +194,13 @@ char *getMethod(char *path, int paramCount, char *parameters[], char *body){
 /*
  * Funcion: postMethod
  * -------------------------
- * Procedimiento por defecto para las consultas bajo el metodo POST,
- * crea un archivo html cuyo cuerpo sera los datos enviados 
- * [no se que podria hacer esto]
+ * Procedimiento el cual se encarga de ejecutar codigo en el servidor,
+ * pasando como parametro lo que se encuentre en el body
+ *
+ * path: Direccion donde se encuentra el recurso 
+ * paramCount: Numero de parametros
+ * parameters: Parametros
+ * body: mensaje asociado al request
  * 
  * Retorno:
  * 			Mensaje siguiendo el formato HTTP
@@ -196,8 +210,9 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 	char *call_1 = "cd ";
 	char *call_2 = ";./";
 	char *call_3 = " > .temp";
-	char *program, *systemCall;
-	int result, pathLen, systemCallLen;
+	char *program, *systemCall, *tempFile, *response;
+	int result, pathLen, systemCallLen, tempFileLen, messageLen, fileLen, responseLen;
+	FILE *fp;
 
 	pathLen = strlen(path);
 
@@ -208,12 +223,11 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 			break;
 		}
 	}
+
 	if(program)
 		*program = 0;
 	program += 1;
 	if(program){
-
-		printf("%s %s\n", path, program);
 
 		systemCallLen = strlen(call_1);
 		systemCallLen += strlen(call_2);
@@ -231,17 +245,36 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 		strcat(systemCall, call_3);
 
 		result = system(systemCall);
-		printf("%d\n", result);
+		if(result)
+			return INTERNAL_ERROR;
+
+		tempFileLen = strlen(path);
+		tempFileLen += strlen(".temp");
+		tempFileLen++;
+		tempFile = malloc(tempFileLen * sizeof(char));
+
+		strcpy(tempFile, path);
+		strcat(tempFile, "/.temp");
+		fp = fopen(tempFile, "r");
+
+		if(fp){
+			
+			messageLen = strlen(OK);
+
+			fseek(fp, 0 , SEEK_END);
+			fileLen = ftell(fp);
+			rewind(fp);
+
+			responseLen = messageLen + fileLen + 1;
+
+			response = calloc(responseLen, sizeof(char));
+			strcpy(response, OK);
+			fread(response + messageLen, fileLen, 1, fp);
+
+			fclose(fp);
+			return response;
+		}
+		return OK;
 	}
 	return NOT_FOUND;
 }
-/*
-int main(int argc, char *argv[]){
-	char *s = 	"GET /asd/d?v=1&v1=2 http/1.1\nheader 1\nheader 2\nheader 3\nheader 4\n\nbody\n\0";
-	
-	
-	char *req = malloc((strlen(s) + 1) * sizeof(char));
-	strcpy(req, s);
-
-	request(req);
-}*/
