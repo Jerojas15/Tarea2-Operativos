@@ -1,18 +1,21 @@
-# Documentación Tarea 2
-### Principios de Sistemas Operativos
-### Julio Rojas
-### Jose Paulo Yock
+# Tarea 2
+#### Principios de Sistemas Operativos
+Julio Rojas - 2015
+
+Jose Paulo Yock - 2015018215
 
 
 ## Introducción: 
 
-Presentar el problema. Puede "reciclar" partes del enunciado de la tarea programada.
+La siguiente tarea consiste en realizar un servidor web implementado en el lenguaje C, mediante la implementacion de hilos "pre-thread" y procesos "pre-fork". Ademas el web server debe ser capaz de procesar consultas utilizando el protocolo de mensajes HTTP/1.1 el cual tambien debe ser implementado en el lenguaje C.
+
+La siguiente tarea tienen la intencion de comprender el funcionamiento de tanto hilos como procesos en el Sistema Operativo Linux.
 
 ## Ambiente de desarrollo: 
 
 Para realizar esta tarea se utilizaron varios lenguajes de programación, tales como, C y Python.
-En C se implementaron las dos maneras del webServer, un cliente para recibir las conexiones del server, como las de HTTP. Y en Python se implementó un programa para medir el server en caracteristicas de estrés, además de otro cliente para HTTP.
-Además de los lenguajes, se utilizaron algunas bibliotecas como en el caso de C la PTHREAD, para hacer uso de los hilos en modo kernel implementados. Por otro lado, en Python, se utilizó Threading y subprocess para realizar el cliente de estrés.
+En C se implementaron las dos maneras del webServer "pre-fork" y "pre-thread", un cliente HTTP para realizar consultas al servidor y la implementacion del protocolo HTTP. Y en Python se implementó un programa para medir el server en caracteristicas de estrés, además de otro cliente para realizar consultas HTTP.
+Además de los lenguajes, se utilizaron algunas bibliotecas como en el caso de C la PTHREAD, para hacer uso de los hilos en modo kernel implementados. Por otro lado, en Python, se utilizó Threading y subprocess para realizar el cliente de estrés, ademas de utilizar pyCurl para implementar el cliente HTTP.
 
 ## Estructuras de datos usadas y funciones: 
 
@@ -60,8 +63,21 @@ $ python3 httpClient.py -i [IP] -u [RECURSO] -p [PUERTO]
 
 Este es un resumen de las bitácoras de cada estudiante ( estilo timesheet) en términos del tiempo invertido para una actividad específica que impactó directamente el desarrollo del trabajo, de manera breve (no más de una línea) se describe lo que se realizó, la cantidad de horas invertidas y la fecha en la que se realizó. Se deben sumar las horas invertidas por cada estudiante, sean concientes a la hora de realizar esto el profesor determinará si los reportes están acordes al producto entregado.
 
-## Comentarios finales (estado del programa): 
+## Comentarios finales (estado del programa):
 
-## Conclusiones y Recomendaciones del proyecto.
+Los servidores funcionan en su totalidad, se parsea correctamente el mensaje HTTP y se responde correctamente el recurso a los clientes. Ademas el servidor es capas de ejecutar un programa si es utilizado el metodo POST y de retornar lo que este programa imprima por el estandar output.
+Ambos clientes implementados tambien funcionan correctamente.
+El programa encargado de estresar el servidor funciona correctamente.
 
-## Bibliografía utilizada en la elaboración de la presente asignación.
+## Conclusiones:
+
+El protocolo HTTP sigue una serie de reglas muy simples, lo cual lo hace facil de comprender y aplicar.
+
+
+## Bibliografía:
+
+* List of HTTP status codes. (2017, September 9). In Wikipedia, The Free Encyclopedia. Retrieved 8 September 2017
+, from https://en.wikipedia.org/w/index.php?title=List_of_HTTP_status_codes
+&oldid=799671481
+
+* HTTP Messages. (2017). Mozilla Developer Network. Retrieved 3 September 2017, from https://developer.mozilla.org/es/docs/Web/HTTP/Messages
