@@ -36,8 +36,10 @@ char *http_protocol(int socket){
 	char *response;
 	char requestMsg[5000];
 	recv(socket , requestMsg, 5000 , 0);
-	printf("---------------------------------\n%s---------------------------------\n", requestMsg);     
-	response = request(requestMsg);
+	printf("---------------------------------\n%s---------------------------------\n", requestMsg);
+
+	char *currentPath = "/home/yock/Desktop/prueba/";	
+	response = request(requestMsg, currentPath);
 	return response;
 }
 

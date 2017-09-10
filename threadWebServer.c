@@ -25,7 +25,9 @@ void *threadHandler(){
 			recv(new_socket_aux , requestMsg, 2000 , 0);
 			printf("---------------------------------\n%s---------------------------------\n", requestMsg);
 			
-			response = request(requestMsg);
+			char *currentPath = "/home/yock/Desktop/prueba/";
+
+			response = request(requestMsg, currentPath);
 			write(new_socket_aux, response, strlen(response));
 
 
