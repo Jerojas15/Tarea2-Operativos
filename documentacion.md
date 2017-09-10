@@ -17,11 +17,44 @@ Además de los lenguajes, se utilizaron algunas bibliotecas como en el caso de C
 ## Estructuras de datos usadas y funciones: 
 
 Para realizar esta tarea, se utilizaron algunas estructuras, como un arreglo de hilos para recibir clientes.
-Entre las
+Entre las funciones utilizadas, las más importantes son: la que se utiliza para crear el socket del server, la que se encarga de realizar el binding al puerto específico y la que hace que el socket comience a escuchar a sus clientes.
+Además de estos, se tiene un módulo del cuál se encarga de discriminar el puerto y asignar el protocolo de respuesta correcto.
+En el módulo implementado para la prueba de estrés, se programó una función la cuál consiste en ejecutar el binario específicado.
 
 ## Instrucciones para ejecutar el programa: 
 
-Presentar las consultas concretas usadas para correr el programa para el problema planteado en el enunciado de la tarea y para los casos planteados al final de esta documentación.
+Para ejecutar alguno de los servers se debe ejecutar
+
+```sh
+$ ./prethread-webserver -p [puerto] -n [cantidad de hilos] -w [path raiz del recurso] 
+//en el caso de los hilos
+
+$ ./preforked-webserver -p [puerto] -n [cantidad de hilos] -w [path raiz del recurso] 
+//en el caso de los procesos
+```
+Con estos comandos se pone a correr el server.
+
+Los puertos posibles son:
+
+- 2020, 2021 para FTP
+- 2025 para SMTP
+- 2053 para DNS
+- 2023 para TELNET
+- 2022 para SSH
+- 8080 para HTTP
+- 2161 para SNMP
+- Cualquier otro, HTTP
+
+Para ejecutar el cliente HTTP en C:
+
+```sh
+$ ./httpClient -i [IP] -u [RECURSO] -p [PUERTO]
+```
+En el caso del cliente HTTP para Python, se debe ejecutar:
+
+```sh
+$ python3 httpClient.py -i [IP] -u [RECURSO] -p [PUERTO]
+```
 
 ## Actividades realizadas por estudiante: 
 
