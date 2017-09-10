@@ -2,19 +2,19 @@
 #### Principios de Sistemas Operativos
 Julio Rojas - 2015
 
-Jose Paulo Yock - 2015018215
+José Paulo Yock - 2015018215
 
 
 ## Introducción: 
 
-La siguiente tarea consiste en realizar un servidor web implementado en el lenguaje C, mediante la implementacion de hilos "pre-thread" y procesos "pre-fork". Ademas el web server debe ser capaz de procesar consultas utilizando el protocolo de mensajes HTTP/1.1 el cual tambien debe ser implementado en el lenguaje C.
+La siguiente tarea consiste en realizar un servidor web implementado en el lenguaje C, mediante la implementación de hilos "pre-thread" y procesos "pre-fork". Ademas el web server debe ser capaz de procesar consultas utilizando el protocolo de mensajes HTTP/1.1 el cual también debe ser implementado en el lenguaje C.
 
-La siguiente tarea tienen la intencion de comprender el funcionamiento de tanto hilos como procesos en el Sistema Operativo Linux.
+La siguiente tarea tienen la intención de comprender el funcionamiento de tanto hilos como procesos en el Sistema Operativo Linux.
 
 ## Ambiente de desarrollo: 
 
 Para realizar esta tarea se utilizaron varios lenguajes de programación, tales como, C y Python.
-En C se implementaron las dos maneras del webServer "pre-fork" y "pre-thread", un cliente HTTP para realizar consultas al servidor y la implementacion del protocolo HTTP. Y en Python se implementó un programa para medir el server en caracteristicas de estrés, además de otro cliente para realizar consultas HTTP.
+En C se implementaron las dos maneras del webServer "pre-fork" y "pre-thread", un cliente HTTP para realizar consultas al servidor y la implementación del protocolo HTTP. Y en Python se implementó un programa para medir el server en características de estrés, además de otro cliente para realizar consultas HTTP.
 Además de los lenguajes, se utilizaron algunas bibliotecas como en el caso de C la PTHREAD, para hacer uso de los hilos en modo kernel implementados. Por otro lado, en Python, se utilizó Threading y subprocess para realizar el cliente de estrés, ademas de utilizar pyCurl para implementar el cliente HTTP.
 
 ## Estructuras de datos usadas y funciones: 
@@ -22,17 +22,17 @@ Además de los lenguajes, se utilizaron algunas bibliotecas como en el caso de C
 Para realizar esta tarea, se utilizaron algunas estructuras, como un arreglo de hilos para recibir clientes.
 Entre las funciones utilizadas, las más importantes son: la que se utiliza para crear el socket del server, la que se encarga de realizar el binding al puerto específico y la que hace que el socket comience a escuchar a sus clientes.
 Además de estos, se tiene un módulo del cuál se encarga de discriminar el puerto y asignar el protocolo de respuesta correcto.
-En el módulo implementado para la prueba de estrés, se programó una función la cuál consiste en ejecutar el binario específicado.
+En el módulo implementado para la prueba de estrés, se programó una función la cuál consiste en ejecutar el binario especificado.
 
 ## Instrucciones para ejecutar el programa: 
 
 Para ejecutar alguno de los servers se debe ejecutar
 
 ```sh
-$ ./prethread-webserver -p [puerto] -n [cantidad de hilos] -w [path raiz del recurso] 
+$ ./prethread-webserver -p [puerto] -n [cantidad de hilos] -w [path raíz del recurso] 
 //en el caso de los hilos
 
-$ ./preforked-webserver -p [puerto] -n [cantidad de hilos] -w [path raiz del recurso] 
+$ ./preforked-webserver -p [puerto] -n [cantidad de hilos] -w [path raíz del recurso] 
 //en el caso de los procesos
 ```
 Con estos comandos se pone a correr el server.
@@ -61,12 +61,41 @@ $ python3 httpClient.py -i [IP] -u [RECURSO] -p [PUERTO]
 
 ## Actividades realizadas por estudiante: 
 
-Este es un resumen de las bitácoras de cada estudiante ( estilo timesheet) en términos del tiempo invertido para una actividad específica que impactó directamente el desarrollo del trabajo, de manera breve (no más de una línea) se describe lo que se realizó, la cantidad de horas invertidas y la fecha en la que se realizó. Se deben sumar las horas invertidas por cada estudiante, sean concientes a la hora de realizar esto el profesor determinará si los reportes están acordes al producto entregado.
+### José Paulo Yock:
+
+#### Viernes 1 de Setiembre (3:00pm - 9:00pm):
+* Investigar sobre el protocolo HTTP
+* Se establece el flujo que seguirá el protocolo
+
+#### Sábado 2 de Setiembre (8:00pm - 9:00pm):
+* Se definen los métodos a utilizar
+
+#### Domingo 3 de Setiembre (12:00pm - 4:00pm):
+* Se comienza a comprender el uso de los hilos ya implementados
+* Se comprende la forma de los mensajes en el protocolo HTTP
+
+#### Lunes 4 de Setiembre (6:00pm - 9:45pm):
+* Se modifica el flujo del WebServer
+* Se implementa el parser del mensaje request
+
+#### Viernes 8 de Setiembre (3:00pm - 9:00pm):
+* Se completa el método GET
+* Se deja el método POST a medias
+
+#### Sábado 11 de Setiembre (6:00pm - 11:00pm):
+* Se presentan problemas con el parser el cual no logra obtener bien el body de un mensaje sin headers
+* Se arregla el error del parser
+* Se pasan parámetros al ejecutable utilizando método POST
+* Se retorna la respuesta del método POST
+
+#### Domingo 12 de Setiembre (11:00am - 3:00pm):
+* Se completa el cliente HTTP en python3 utilizando pyCurl
+
 
 ## Comentarios finales (estado del programa):
 
-Los servidores funcionan en su totalidad, se parsea correctamente el mensaje HTTP y se responde correctamente el recurso a los clientes. Ademas el servidor es capas de ejecutar un programa si es utilizado el metodo POST y de retornar lo que este programa imprima por el estandar output.
-Ambos clientes implementados tambien funcionan correctamente.
+Los servidores funcionan en su totalidad, se parsea correctamente el mensaje HTTP y se responde correctamente el recurso a los clientes. Ademas el servidor es capas de ejecutar un programa si es utilizado el método POST y de retornar lo que este programa imprima por el estandar output.
+Ambos clientes implementados también funcionan correctamente.
 El programa encargado de estresar el servidor funciona correctamente.
 
 ## Conclusiones:
