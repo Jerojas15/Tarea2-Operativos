@@ -27,8 +27,8 @@ int headerCount(char *requestMsg){
 	ith = 0;
 	while(c1){
 		c1 = requestMsg[ith];
-		c2 = requestMsg[ith+1];
-		if(c1 == '\n'){
+		c2 = requestMsg[ith+2];
+		if(c1 == '\r'){
 			
 			if(c1 == c2 || !c2)
 				break;
@@ -97,19 +97,19 @@ char *request(char *requestMsg, char *currentPath){
 
 	method = strtok(requestMsg, " ");
 	path = strtok(NULL, " ");
-	httpVersion = strtok(NULL, "\n");
+	httpVersion = strtok(NULL, "\r\n");
 
-	headers = (char**)malloc(headersCount * sizeof(char*));
+	if(headersCount > 0){
+		headers = (char**)malloc(headersCount * sizeof(char*));
+		for(int i = 0; i < headersCount; i++){
 
-	for(int i = 0; i < headersCount; i++){
-
-		headers[i] = strtok(NULL, "\n");
+			headers[i] = strtok(NULL, "\r\n");
+		}
 	}
-
-	body = strtok(NULL, "\n\0");
-	if(body)
-		body += 1;						//Ignorar el segundo \n despues de los headers si existe
 	
+
+	body = strtok(NULL, "\r\n\0");
+
 	paramsCount = paramCount(path); 	//Si el path presenta parametros, aqui se parsean
 	if(paramsCount > 0){
 
@@ -209,7 +209,8 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 	
 	char *call_1 = "cd ";
 	char *call_2 = ";./";
-	char *call_3 = " > .temp";
+	char *call_3 = " ";
+	char *call_4 = " > .temp";
 	char *program, *systemCall, *tempFile, *response;
 	int result, pathLen, systemCallLen, tempFileLen, messageLen, fileLen, responseLen;
 	FILE *fp;
@@ -232,17 +233,20 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 		systemCallLen = strlen(call_1);
 		systemCallLen += strlen(call_2);
 		systemCallLen += strlen(call_3);
+		systemCallLen += strlen(call_4);
 		systemCallLen += strlen(path);
 		systemCallLen += strlen(program);
+		systemCallLen += strlen(body);
 		systemCallLen++;
 
 		systemCall = calloc(systemCallLen, sizeof(char));
-
 		strcpy(systemCall, call_1);
 		strcat(systemCall, path);
 		strcat(systemCall, call_2);
 		strcat(systemCall, program);
 		strcat(systemCall, call_3);
+		strcat(systemCall, body);
+		strcat(systemCall, call_4);
 
 		result = system(systemCall);
 		if(result)
@@ -256,7 +260,6 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 		strcpy(tempFile, path);
 		strcat(tempFile, "/.temp");
 		fp = fopen(tempFile, "r");
-
 		if(fp){
 			
 			messageLen = strlen(OK);
@@ -265,11 +268,12 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 			fileLen = ftell(fp);
 			rewind(fp);
 
-			responseLen = messageLen + fileLen + 1;
+			responseLen = messageLen + fileLen + 2;
 
 			response = calloc(responseLen, sizeof(char));
 			strcpy(response, OK);
-			fread(response + messageLen, fileLen, 1, fp);
+			strcat(response, "\n");
+			fread(response + messageLen + 1, fileLen, 1, fp);
 
 			fclose(fp);
 			return response;
@@ -278,3 +282,24 @@ char *postMethod(char *path, int paramCount, char *parameters[], char *body){
 	}
 	return NOT_FOUND;
 }
+
+/*for(int i = 0; i < strlen(requestMsg); i++){
+
+		if(requestMsg[i] == 13)
+			printf(" 13");
+
+		else if(requestMsg[i] == '\n')
+			printf("10\n");
+
+		else
+			printf("%c", requestMsg[i]);
+	}
+
+	printf("xxxx\n");
+	printf("%s\n", method); printf("%s\n", path);
+	for(int i = 0; i < paramsCount; i++) printf("%s\n", parameters[i]);
+	printf("%s\n--", httpVersion);
+	for(int i = 0; i < headersCount; i++)  printf("%s\n", headers[i]);
+	if(body)
+		printf("--%sxxxx\n", body);
+		*/
