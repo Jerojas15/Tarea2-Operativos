@@ -30,6 +30,9 @@ run_default_pre-fork:
 run_default_c_client:
 	./$(EXE3) -u /home/julio/
 
+run_default_py_client:
+	python3 httpClient.py -u /index.html
+
 clean:
 	rm $(EXE)
 	rm $(EXE2)
