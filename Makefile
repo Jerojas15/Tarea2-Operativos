@@ -28,7 +28,7 @@ run_default_pre-fork:
 	./$(EXE2) -p 8080 -n 2 -w /home/julio/
 
 run_default_client:
-	./$(EXE3) 
+	./$(EXE3) -u /home/julio/
 
 clean:
 	rm $(EXE)
