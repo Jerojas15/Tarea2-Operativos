@@ -14,7 +14,7 @@ HTTPFILES = httpClient.c
 
 EXE = prethread-webserver
 EXE2 = preforked-webserver
-EXE3 = httpCClient
+EXE3 = httpClient
 
 all: 
 	gcc $(LIBRARYS) $(THREADHEADERS) $(GLOBALHEADERS) $(GLOBARLFILES) $(THREADFILES) -o $(EXE)

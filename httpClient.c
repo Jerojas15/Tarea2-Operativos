@@ -36,8 +36,9 @@ int main(int argc, char *argv[]){
 
 	//el mensaje debe ser "GET resource HTTP/1.1\n"
 	strcpy(message, "GET ");
-	strcat(message, resource); // el recurso debe iniciar con '/'
+	strcat(message, current_path); // el recurso debe iniciar con '/'
 	strcat(message, " HTTP/1.1\n");
+	
 	if(port == 8080){
 		send(sock,message,strlen(message),0);
 	}

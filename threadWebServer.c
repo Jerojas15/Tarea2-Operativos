@@ -5,7 +5,7 @@
 //http://www.binarytides.com/socket-programming-c-linux-tutorial/
 //http://www.thegeekstuff.com/2012/05/c-mutex-examples/?refcom
 //https://gist.github.com/alexklibisz/7cffdfe90c97986f8393
-
+//https://docs.python.org/2/library/subprocess.html
 void *threadHandler(){
 
 	int new_socket_aux;
