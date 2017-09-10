@@ -14,7 +14,7 @@ HTTPFILES = httpClient.c
 
 EXE = prethread-webserver
 EXE2 = preforked-webserver
-EXE3 = httpClient
+EXE3 = httpCClient
 
 all: 
 	gcc $(LIBRARYS) $(THREADHEADERS) $(GLOBALHEADERS) $(GLOBARLFILES) $(THREADFILES) -o $(EXE)
@@ -27,7 +27,7 @@ run_default_pre-thread:
 run_default_pre-fork:
 	./$(EXE2) -p 8080 -n 2 -w /home/julio/
 
-run_default_client:
+run_default_c_client:
 	./$(EXE3) -u /home/julio/
 
 clean:
