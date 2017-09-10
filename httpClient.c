@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 	}
 	char * message = (char *)calloc(5000, sizeof(char)); ////AQUI VA EL REQUEST
 	if(port == 8080){
-		send(sock , message , strlen(message) , 0);	
+		send(sock,message,strlen(message),0);
 	}
 	recv(sock , response , 2000 , 0);//AQUI RECIBE EL RESULTADO DEL REQUEST Y LO GUARDA EN RESPONSE
 	printf("%s\n", response);
